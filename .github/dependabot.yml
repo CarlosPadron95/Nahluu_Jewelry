@@ -10,6 +10,12 @@ updates:
     groups:
       backend:
         patterns: ["*"]
+    ignore:
+      # Nos quedamos en Django 5.2 LTS (soporte hasta abril de 2028).
+      # Solo aceptamos sus parches (5.2.x), que incluyen los arreglos de seguridad.
+      # El salto a la siguiente LTS se hará a mano, con calma.
+      - dependency-name: "django"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: npm
     directory: /frontend
@@ -18,6 +24,8 @@ updates:
     groups:
       frontend:
         patterns: ["*"]
+        # Las versiones mayores (que pueden romper cosas) llegan por separado
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: github-actions
     directory: /
