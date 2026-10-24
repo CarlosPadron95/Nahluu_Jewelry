@@ -1,0 +1,4 @@
+# Librerías para el servidor de producción (incluye las de base.txt)
+-r base.txt
+
+gunicorn==26.2.0

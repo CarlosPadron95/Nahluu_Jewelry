@@ -1,0 +1,10 @@
+# Librerías que necesita el backend en cualquier entorno.
+# Versiones fijadas para que todos (tu ordenador, GitHub y Render) usen lo mismo.
+# Dependabot avisará cuando haya versiones nuevas.
+
+Django==5.2.18
+djangorestframework==3.18.3
+django-environ==0.14.0
+django-cors-headers==4.9.0
+psycopg[binary]==3.3.6
+whitenoise==6.12.0

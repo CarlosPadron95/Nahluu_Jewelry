@@ -1,0 +1,42 @@
+# ------------------------------------------------------------------
+# Comprobaciones automáticas antes de cada commit (pre-commit).
+#
+# Instalar una sola vez:   pre-commit install
+# Probar a mano:           pre-commit run --all-files
+#
+# Si algo falla, el commit no se hace y te dice qué arreglar.
+# ------------------------------------------------------------------
+
+repos:
+  # Comprobaciones generales
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+        exclude: ^frontend/tsconfig\.json$
+      - id: check-merge-conflict
+      # Evita subir archivos enormes por error (más de 500 KB)
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+        exclude: ^frontend/package-lock\.json$
+      # Evita subir claves privadas
+      - id: detect-private-key
+
+  # Gitleaks: busca contraseñas y claves (Stripe, Cloudinary...) antes de subirlas
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  # Ruff: estilo y errores del código Python del backend
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.2
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+        files: ^backend/
+      - id: ruff-format
+        files: ^backend/

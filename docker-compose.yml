@@ -1,0 +1,35 @@
+# ------------------------------------------------------------------
+# Servicios para programar en local.
+#
+# Por ahora solo la base de datos PostgreSQL (la misma versión que
+# usaremos en Render). Django y Next.js se arrancan en tu ordenador.
+#
+#   Arrancar:  docker compose up -d
+#   Parar:     docker compose down
+#   Borrar los datos (¡cuidado!):  docker compose down -v
+# ------------------------------------------------------------------
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: nahluu-db
+    restart: unless-stopped
+    environment:
+      # Datos SOLO para tu ordenador. En Render la base de datos es otra.
+      POSTGRES_DB: nahluu
+      POSTGRES_USER: nahluu
+      POSTGRES_PASSWORD: nahluu_local
+    ports:
+      # Solo accesible desde tu propio ordenador
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Los datos se guardan aquí y no se pierden al apagar el ordenador
+      - nahluu_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nahluu -d nahluu"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  nahluu_db_data:

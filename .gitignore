@@ -1,0 +1,41 @@
+# ------------------------------------------------------------------
+# Archivos que Git NO debe subir nunca
+# ------------------------------------------------------------------
+
+# --- Secretos (lo más importante de este archivo) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+backend/staticfiles/
+backend/media/
+*.sqlite3
+
+# --- Node / Next.js (el frontend tiene además su propio .gitignore) ---
+node_modules/
+.next/
+
+# --- Editores y sistema operativo ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Copias de la base de datos (pueden tener datos de clientes) ---
+*.dump
+*.sql
+*.backup

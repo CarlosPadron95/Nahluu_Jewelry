@@ -1,0 +1,11 @@
+# Todos los archivos de texto se guardan con saltos de línea de Linux (LF).
+# Así no hay líos entre Windows, GitHub y Render.
+* text=auto eol=lf
+
+# Archivos binarios: Git no debe tocarlos
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff2 binary

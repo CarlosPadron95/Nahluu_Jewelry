@@ -1,0 +1,25 @@
+# Dependabot revisa cada semana si hay versiones nuevas de las librerías
+# (sobre todo arreglos de seguridad) y abre un pull request para actualizarlas.
+
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /backend/requirements
+    schedule:
+      interval: weekly
+    groups:
+      backend:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      frontend:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

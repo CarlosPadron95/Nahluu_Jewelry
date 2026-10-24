@@ -1,0 +1,7 @@
+# Librerías para programar y probar en local (incluye las de base.txt)
+-r base.txt
+
+pytest==9.1.1
+pytest-django==4.14.0
+ruff==0.17.2
+pre-commit==4.7.0

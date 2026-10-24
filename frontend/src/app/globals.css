@@ -1,0 +1,85 @@
+/*
+ * Estilos globales de Nahluu Jewelry.
+ *
+ * Aquí están los "tokens" del diseño: colores, fuentes y medidas.
+ * Si un color cambia, se cambia solo aquí y se actualiza toda la web.
+ */
+
+:root {
+  /* --- Colores de la marca --- */
+  --color-crema: #f7efe3; /* fondo de toda la web */
+  --color-tinta: #2b2420; /* texto, botones oscuros y pie */
+  --color-dorado: #85663e; /* rótulos dorados sobre crema */
+  --color-dorado-oscuro: #6d5433; /* rótulos dorados sobre arena */
+  --color-marron: #6a5a48; /* precios y texto secundario */
+  --color-linea: #eadbc3; /* líneas finas y bordes */
+  --color-fondo-foto: #efe2cc; /* fondo de las fotos de producto */
+  --color-arena: #e3cf9f; /* bandas de arena */
+  --color-texto-pie: #cbbba3; /* texto del pie */
+  --color-blanco: #ffffff; /* solo campos de formulario */
+
+  /* --- Fuentes (las define src/fonts/index.ts) --- */
+  --fuente-titulos: var(--font-cormorant), "Times New Roman", serif;
+  --fuente-texto: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
+
+  /* --- Medidas --- */
+  --ancho-contenido: 1100px;
+  --margen-lateral: 18px;
+}
+
+/* Reinicio básico */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-crema);
+  color: var(--color-tinta);
+  font-family: var(--fuente-texto);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulos);
+  font-weight: 400; /* nunca en negrita */
+  line-height: 1.1;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Foco visible para quien navega con teclado (accesibilidad) */
+:focus-visible {
+  outline: 2px solid var(--color-dorado);
+  outline-offset: 2px;
+}
+
+/* Respetar a quien prefiere menos animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

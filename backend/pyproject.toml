@@ -1,0 +1,26 @@
+# Configuración de las herramientas del backend
+
+[tool.pytest.ini_options]
+# Los tests usan la configuración de test.py
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+# Ruff revisa el estilo y los errores típicos de Python
+line-length = 100
+target-version = "py313"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+# E/F: errores básicos · I: orden de imports · B: fallos frecuentes
+# UP: sintaxis moderna · DJ: buenas prácticas de Django · S: seguridad
+select = ["E", "F", "I", "B", "UP", "DJ", "S"]
+ignore = [
+    # assert es normal dentro de los tests
+    "S101",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# En los tests se permiten contraseñas de prueba escritas en el código
+"**/tests/**" = ["S105", "S106"]
