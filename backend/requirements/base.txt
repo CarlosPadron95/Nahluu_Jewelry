@@ -2,7 +2,7 @@
 # Versiones fijadas para que todos (tu ordenador, GitHub y Render) usen lo mismo.
 # Dependabot avisará cuando haya versiones nuevas.
 
-Django==5.2.18
+Django==6.1.2
 djangorestframework==3.18.3
 django-environ==0.14.0
 django-cors-headers==4.9.0
