@@ -86,6 +86,9 @@ jobs:
 
       - name: Revisión de seguridad de producción
         run: python manage.py check --deploy --fail-level WARNING --settings=config.settings.prod
+        env:
+          # Producción exige Cloudinary. Esta dirección es falsa: no se conecta a nada.
+          CLOUDINARY_URL: cloudinary://000000000000000:no-es-un-secreto@nahluu-ci
 
       - name: Tests (pytest)
         run: pytest

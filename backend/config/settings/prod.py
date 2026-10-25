@@ -6,7 +6,7 @@ Todo lo que hay aquí endurece la seguridad. Para comprobarla:
 """
 
 from .base import *  # noqa: F403
-from .base import env
+from .base import STORAGES, env
 
 DEBUG = False
 
@@ -27,3 +27,15 @@ SECURE_HSTS_PRELOAD = env.bool("DJANGO_HSTS_PRELOAD", default=True)
 
 # La sesión del panel de administración caduca tras 8 horas
 SESSION_COOKIE_AGE = 60 * 60 * 8
+
+
+# --- Fotos: en producción siempre van a Cloudinary ---
+
+# Sin CLOUDINARY_URL, Django no arranca: el disco de Render se borra
+# en cada despliegue y las fotos se perderían
+CLOUDINARY_URL = env("CLOUDINARY_URL")
+CLOUDINARY_FOLDER = env("CLOUDINARY_FOLDER", default="nahluu")
+STORAGES["default"] = {
+    "BACKEND": "apps.core.storage.CloudinaryStorage",
+    "OPTIONS": {"cloudinary_url": CLOUDINARY_URL, "folder": CLOUDINARY_FOLDER},
+}

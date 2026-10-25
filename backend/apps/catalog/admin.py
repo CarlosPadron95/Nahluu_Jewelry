@@ -10,6 +10,8 @@ from django.db.models import Count
 from django.utils import timezone
 from django.utils.html import format_html
 
+from apps.core.storage import resized_url
+
 from .forms import ProductAdminForm, ProductImageInlineFormSet
 from .models import Category, Collection, Product, ProductImage
 
@@ -18,10 +20,12 @@ def photo_thumbnail(photo, size=64):
     """Miniatura de una foto para las listas del panel."""
     if not photo:
         return "—"
+    # Pedimos la foto al doble de tamaño para que se vea nítida en pantallas retina
+    thumbnail_url = resized_url(photo.url, size * 2, size * 2)
     return format_html(
         '<img src="{}" alt="" width="{}" height="{}" '
         'style="object-fit: cover; border-radius: 4px;">',
-        photo.url,
+        thumbnail_url,
         size,
         size,
     )

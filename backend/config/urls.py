@@ -17,6 +17,6 @@ urlpatterns = [
     path("api/", include("apps.core.urls")),
 ]
 
-# En local, Django sirve las fotos subidas (en producción las sirve Cloudinary)
+# En local sin Cloudinary, Django sirve las fotos de backend/media/
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
