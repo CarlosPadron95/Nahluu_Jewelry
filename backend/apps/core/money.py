@@ -8,6 +8,9 @@ de coma flotante, y además Stripe también trabaja en céntimos.
 
 from decimal import ROUND_HALF_UP, Decimal
 
+# La tienda cobra solo en euros (código ISO 4217, el que usa Stripe en minúsculas)
+CURRENCY = "EUR"
+
 
 def euros_to_cents(amount: Decimal) -> int:
     """Pasa de euros a céntimos: Decimal("45.5") -> 4550."""

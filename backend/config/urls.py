@@ -15,6 +15,8 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # Toda la API empieza por /api/
     path("api/", include("apps.core.urls")),
+    # API pública del catálogo (solo lectura)
+    path("api/catalog/", include("apps.catalog.urls")),
 ]
 
 # En local sin Cloudinary, Django sirve las fotos de backend/media/

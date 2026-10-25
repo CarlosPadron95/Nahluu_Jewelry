@@ -116,6 +116,27 @@ class ProductQuerySet(models.QuerySet):
         """Solo los productos que se ven en la tienda."""
         return self.filter(is_active=True)
 
+    def for_shop(self):
+        """
+        Productos publicados con todo lo que necesita la tienda.
+
+        - select_related y prefetch_related traen la categoría, la colección
+          y las fotos en muy pocas consultas (y no una por producto).
+        - sold_out_rank vale 1 si está agotado: sirve para ordenar
+          los agotados siempre al final.
+        """
+        return (
+            self.published()
+            .select_related("category", "collection")
+            .prefetch_related("images")
+            .annotate(
+                sold_out_rank=models.Case(
+                    models.When(stock=0, then=models.Value(1)),
+                    default=models.Value(0),
+                )
+            )
+        )
+
 
 class Product(TimeStampedModel):
     """Una joya de la tienda. Talla única: no hay variantes."""
