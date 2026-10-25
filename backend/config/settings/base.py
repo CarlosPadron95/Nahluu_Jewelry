@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 # Nuestras propias aplicaciones (catálogo, pedidos... irán aquí)
 LOCAL_APPS = [
     "apps.core",
+    "apps.catalog",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -149,6 +150,14 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+
+# --- Archivos subidos (fotos de productos y colecciones) ---
+
+# En local se guardan en backend/media/ (ignorada por Git).
+# En producción irán a Cloudinary (siguiente paso de la fase 2).
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # --- Panel de administración ---

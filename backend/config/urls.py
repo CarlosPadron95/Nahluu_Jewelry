@@ -1,6 +1,7 @@
 """Rutas principales del backend."""
 
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
@@ -15,3 +16,7 @@ urlpatterns = [
     # Toda la API empieza por /api/
     path("api/", include("apps.core.urls")),
 ]
+
+# En local, Django sirve las fotos subidas (en producción las sirve Cloudinary)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,7 +2,7 @@
 
 Tienda online de **Nahluu Jewelry**: joyas hechas a mano en Gran Canaria en plata 925 chapada en oro. Venta a todo el mundo, en español e inglés.
 
-> **Estado:** fase 1 de 8 (preparación del proyecto). La tienda todavía no está publicada.
+> **Estado:** fase 2 de 8 (catálogo y panel de administración). La tienda todavía no está publicada.
 
 ## Tecnologías
 
@@ -20,7 +20,7 @@ Tienda online de **Nahluu Jewelry**: joyas hechas a mano en Gran Canaria en plat
 ```
 nahluu/
 ├── backend/            # API y panel de administración (Django)
-│   ├── apps/           # Aplicaciones de la tienda (core, catálogo, pedidos...)
+│   ├── apps/           # Aplicaciones de la tienda: core (común) y catalog (catálogo)
 │   ├── config/         # Configuración: settings por entorno, rutas
 │   └── requirements/   # Librerías de Python (base, dev, prod)
 ├── frontend/           # Web de la tienda (Next.js)
@@ -90,11 +90,31 @@ Con el entorno virtual del backend activado, desde la carpeta raíz del proyecto
 pre-commit install
 ```
 
+## Catálogo
+
+Desde el panel de administración se gestionan las **categorías** (la tienda abre con Collares y Pendientes), las **colecciones** y los **productos** con sus fotos.
+
+- Textos en español e inglés. Un producto se puede guardar como borrador a medias, pero para publicarlo necesita los textos en los dos idiomas y al menos una foto.
+- Los precios se escriben en euros y se guardan en céntimos, sin errores de redondeo.
+- El stock controla las etiquetas «Últimas unidades» (3 o menos) y «Agotado».
+- Las fotos se giran solas, se reducen a 2560 px, se guardan en WebP y **se les quitan los metadatos EXIF**, que pueden incluir la ubicación GPS de donde se hicieron.
+
+## Flujo de trabajo
+
+La rama `main` está protegida: no admite `push` directo ni `force push`, y solo acepta cambios que hayan pasado la CI.
+
+1. Rama nueva para cada cambio: `git switch -c feature/nombre-del-cambio`
+2. Commits pequeños con [Conventional Commits](https://www.conventionalcommits.org/es/) (`feat:`, `fix:`, `chore:`...)
+3. `git push -u origin feature/nombre-del-cambio` y pull request en GitHub
+4. Cuando la CI está en verde, se fusiona y se borra la rama
+
 ## Comandos útiles
 
 | Qué | Dónde | Comando |
 | --- | --- | --- |
 | Tests del backend | `backend/` | `pytest` |
+| Crear migraciones | `backend/` | `python manage.py makemigrations` |
+| Aplicar migraciones | `backend/` | `python manage.py migrate` |
 | Estilo del backend | `backend/` | `ruff check .` y `ruff format .` |
 | Revisión de seguridad | `backend/` | `python manage.py check --deploy --settings=config.settings.prod` |
 | Estilo del frontend | `frontend/` | `npm run lint` y `npm run format` |
