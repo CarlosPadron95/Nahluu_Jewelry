@@ -102,6 +102,25 @@ Desde el panel de administración se gestionan las **categorías** (la tienda ab
 - Las fotos se giran solas, se reducen a 2560 px, se guardan en WebP y **se les quitan los metadatos EXIF**, que pueden incluir la ubicación GPS de donde se hicieron.
 - Las fotos se guardan en **Cloudinary**, que las sirve desde su CDN, con una carpeta por entorno (`nahluu-local`, `nahluu`) para no mezclar pruebas y fotos reales. Producción no arranca sin Cloudinary, porque el disco de Render se borra en cada despliegue.
 
+## API del catálogo
+
+API pública de solo lectura que consume la web. Responde en español o en inglés: con `?lang=en`, o según la cabecera `Accept-Language` del navegador.
+
+| Ruta | Qué devuelve |
+| --- | --- |
+| `GET /api/catalog/categories/` | Categorías con su número de productos publicados |
+| `GET /api/catalog/collections/` | Colecciones visibles |
+| `GET /api/catalog/collections/<slug>/` | Una colección |
+| `GET /api/catalog/products/` | Productos publicados, por páginas de 24 |
+| `GET /api/catalog/products/<slug>/` | Ficha completa, con todas las fotos y «También te puede gustar» |
+
+Filtros de la lista de productos, que se pueden combinar: `category`, `collection`, `featured=true`, `new=true`, `q` (búsqueda sin tener en cuenta tildes ni mayúsculas), `ordering` (`featured`, `newest`, `price_asc`, `price_desc`), `page` y `page_size` (máximo 48).
+
+- Los agotados siempre van al final.
+- Nunca se envía el stock exacto, solo las etiquetas «Últimas unidades» y «Agotado».
+- Los precios van en céntimos (`price_cents`) con su moneda (`currency: "EUR"`), y la web les da formato según el idioma.
+- La lista hace siempre 3 consultas a la base de datos, haya los productos que haya, y un test lo comprueba.
+
 ## Flujo de trabajo
 
 La rama `main` está protegida: no admite `push` directo ni `force push`, y solo acepta cambios que hayan pasado la CI.

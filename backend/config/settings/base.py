@@ -40,6 +40,8 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Funciones propias de PostgreSQL (por ejemplo, buscar sin tildes con unaccent)
+    "django.contrib.postgres",
 ]
 
 THIRD_PARTY_APPS = [
