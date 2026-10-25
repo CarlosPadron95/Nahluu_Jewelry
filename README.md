@@ -60,6 +60,8 @@ Abre `backend/.env` y rellena `DJANGO_SECRET_KEY` con una clave nueva. Para gene
 python -c "import secrets; print(secrets.token_urlsafe(50))"
 ```
 
+Opcional: para que las fotos se guarden en Cloudinary también en local, rellena `CLOUDINARY_URL` (Cloudinary → Settings → API Keys). Si la dejas vacía, se guardan en `backend/media/`.
+
 Después:
 
 ```powershell
@@ -98,6 +100,7 @@ Desde el panel de administración se gestionan las **categorías** (la tienda ab
 - Los precios se escriben en euros y se guardan en céntimos, sin errores de redondeo.
 - El stock controla las etiquetas «Últimas unidades» (3 o menos) y «Agotado».
 - Las fotos se giran solas, se reducen a 2560 px, se guardan en WebP y **se les quitan los metadatos EXIF**, que pueden incluir la ubicación GPS de donde se hicieron.
+- Las fotos se guardan en **Cloudinary**, que las sirve desde su CDN, con una carpeta por entorno (`nahluu-local`, `nahluu`) para no mezclar pruebas y fotos reales. Producción no arranca sin Cloudinary, porque el disco de Render se borra en cada despliegue.
 
 ## Flujo de trabajo
 
@@ -124,6 +127,7 @@ La rama `main` está protegida: no admite `push` directo ni `force push`, y solo
 ## Seguridad
 
 - Ninguna clave se guarda en el código: todo va en archivos `.env` (ignorados por Git) y en el panel de Render.
+- Los tests nunca se conectan a servicios externos: Cloudinary se sustituye por un falso que apunta lo que recibe.
 - Antes de cada commit, **gitleaks** comprueba que no se sube ninguna clave por error, y GitHub Actions lo vuelve a comprobar en todo el historial.
 - La configuración de producción pasa `manage.py check --deploy` sin avisos (HTTPS obligatorio, HSTS, cookies seguras).
 - La web envía cabeceras de seguridad en todas las páginas.

@@ -154,10 +154,21 @@ STORAGES = {
 
 # --- Archivos subidos (fotos de productos y colecciones) ---
 
-# En local se guardan en backend/media/ (ignorada por Git).
-# En producción irán a Cloudinary (siguiente paso de la fase 2).
+# Sin Cloudinary, se guardan en backend/media/ (carpeta ignorada por Git)
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Con CLOUDINARY_URL, las fotos se guardan en Cloudinary (ver apps/core/storage.py).
+# En local es opcional; en producción es obligatorio (ver prod.py).
+CLOUDINARY_URL = env("CLOUDINARY_URL", default="")
+# Carpeta de Cloudinary de cada entorno, para no mezclar fotos de prueba y reales
+CLOUDINARY_FOLDER = env("CLOUDINARY_FOLDER", default="nahluu-local")
+
+if CLOUDINARY_URL:
+    STORAGES["default"] = {
+        "BACKEND": "apps.core.storage.CloudinaryStorage",
+        "OPTIONS": {"cloudinary_url": CLOUDINARY_URL, "folder": CLOUDINARY_FOLDER},
+    }
 
 
 # --- Panel de administración ---
