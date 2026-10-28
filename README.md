@@ -73,6 +73,14 @@ python manage.py runserver
 - API: <http://localhost:8000/api/health/>
 - Panel de administración: <http://localhost:8000/admin/>
 
+El panel pide **verificación en dos pasos**. La primera vez, crea un código de emergencia para entrar:
+
+```powershell
+python manage.py addstatictoken TU_USUARIO
+```
+
+Entra con tu usuario, tu contraseña y ese código. Después, en **Otp_Totp → TOTP devices → Añadir**, crea un dispositivo para tu usuario, pulsa **qrcode** y escanéalo con tu app de autenticación (Google Authenticator, Microsoft Authenticator...). A partir de ahí, se entra con los 6 números de la app.
+
 ### 3. Frontend (Next.js), en otra terminal
 
 ```powershell
@@ -145,6 +153,12 @@ La rama `main` está protegida: no admite `push` directo ni `force push`, y solo
 
 ## Seguridad
 
+- **Panel de administración blindado:**
+  - Ruta secreta configurable (`DJANGO_ADMIN_URL`).
+  - **Verificación en dos pasos obligatoria** para todos, también para el superusuario: contraseña más código de la app del móvil, con códigos de emergencia de un solo uso.
+  - **Bloqueo de 30 minutos tras 5 intentos fallidos** (django-axes), contado por usuario e IP real de la conexión, sin fiarse de cabeceras que se pueden falsificar.
+  - Contraseñas de al menos 12 caracteres y sesiones que caducan a las 8 horas.
+- **Mínimo privilegio:** el grupo «Equipo de la tienda» gestiona el catálogo, pero no puede tocar usuarios, permisos ni la seguridad. Sus permisos se definen en el código (`apps/core/groups.py`) y se aplican en cada `migrate`.
 - Ninguna clave se guarda en el código: todo va en archivos `.env` (ignorados por Git) y en el panel de Render.
 - Los tests nunca se conectan a servicios externos: Cloudinary se sustituye por un falso que apunta lo que recibe.
 - Antes de cada commit, **gitleaks** comprueba que no se sube ninguna clave por error, y GitHub Actions lo vuelve a comprobar en todo el historial.

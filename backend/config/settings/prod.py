@@ -39,3 +39,9 @@ STORAGES["default"] = {
     "BACKEND": "apps.core.storage.CloudinaryStorage",
     "OPTIONS": {"cloudinary_url": CLOUDINARY_URL, "folder": CLOUDINARY_FOLDER},
 }
+
+
+# --- Verificación en dos pasos ---
+
+# Nombre de la cuenta en la app de autenticación del móvil
+OTP_TOTP_ISSUER = env("OTP_TOTP_ISSUER", default="Nahluu Jewelry")
