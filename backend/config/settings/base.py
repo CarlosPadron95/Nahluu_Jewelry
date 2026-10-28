@@ -5,6 +5,7 @@ Ningún dato secreto se escribe aquí: todo lo sensible se lee de variables
 de entorno (archivo .env en local, panel de Render en producción).
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -34,7 +35,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 # --- Aplicaciones ---
 
 DJANGO_APPS = [
-    "django.contrib.admin",
+    # Nuestro panel de administración, con verificación en dos pasos
+    # (sustituye a "django.contrib.admin", ver apps/core/admin_site.py)
+    "apps.core.admin_config.NahluuAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -47,6 +50,12 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
+    # Verificación en dos pasos: códigos de la app del móvil y de emergencia
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_static",
+    # Bloqueo tras varios intentos fallidos de contraseña
+    "axes",
 ]
 
 # Nuestras propias aplicaciones (catálogo, pedidos... irán aquí)
@@ -71,8 +80,12 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Marca si el usuario ha pasado la verificación en dos pasos
+    "django_otp.middleware.OTPMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # django-axes tiene que ir el último
+    "axes.middleware.AxesMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -111,6 +124,30 @@ DATABASES["default"].setdefault("OPTIONS", {})["connect_timeout"] = env.int(
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# --- Acceso al panel de administración ---
+
+# axes va el primero: comprueba si la cuenta está bloqueada antes de mirar la contraseña
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+# django-axes: tras 5 contraseñas incorrectas seguidas, bloqueo de 30 minutos.
+# Se cuenta por usuario + IP. Usamos la IP real de la conexión (REMOTE_ADDR)
+# y no cabeceras como X-Forwarded-For, que cualquiera puede falsificar.
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = timedelta(minutes=30)
+AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
+# Si entra bien, se olvidan los fallos anteriores
+AXES_RESET_ON_SUCCESS = True
+# Página (en español) que se muestra al bloquear
+AXES_LOCKOUT_TEMPLATE = "admin/lockout.html"
+
+# Nombre con el que aparece la cuenta en la app de autenticación del móvil.
+# En local pone "(local)" para no confundirla con la de la tienda real.
+OTP_TOTP_ISSUER = env("OTP_TOTP_ISSUER", default="Nahluu Jewelry (local)")
 
 
 # --- Contraseñas del panel de administración ---

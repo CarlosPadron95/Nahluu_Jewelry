@@ -1,0 +1,51 @@
+<!doctype html>
+{% comment %}
+  Página que muestra django-axes cuando una cuenta se bloquea por
+  demasiados intentos fallidos. Es independiente del panel a propósito:
+  quien la ve todavía no ha entrado.
+{% endcomment %}
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Acceso bloqueado · Nahluu Jewelry</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      box-sizing: border-box;
+      background: #f7efe3;
+      color: #2b2420;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 440px;
+      padding: 32px;
+      background: #fff;
+      border: 1px solid #eadbc3;
+      border-radius: 8px;
+    }
+    h1 {
+      margin-top: 0;
+      color: #85663e;
+      font-weight: 500;
+      font-size: 1.5rem;
+    }
+    p { margin: 0 0 12px; }
+    .small { color: #6a5a48; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Acceso bloqueado temporalmente</h1>
+    <p>Se han introducido datos incorrectos demasiadas veces seguidas y, por seguridad, hemos bloqueado el acceso a esta cuenta.</p>
+    <p>Podrás intentarlo de nuevo dentro de 30 minutos.</p>
+    <p class="small">Si no has sido tú, avisa a quien administra la tienda.</p>
+  </main>
+</body>
+</html>

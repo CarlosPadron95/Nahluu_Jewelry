@@ -1,0 +1,63 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% comment %}
+  Pantalla de entrada al panel con verificación en dos pasos.
+  Es la de Django con un campo más: el código de la app del móvil.
+{% endcomment %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "admin/css/login.css" %}">
+  {{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content %}
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+      <p class="errornote">{{ error }}</p>
+    {% endfor %}
+  {% elif form.errors %}
+    <p class="errornote">Revisa los datos marcados.</p>
+  {% endif %}
+
+  <div id="content-main">
+    {% if user.is_authenticated %}
+      <p class="errornote">
+        Has entrado como {{ username }}, pero esta cuenta no puede ver esta página.
+        ¿Quieres entrar con otra cuenta?
+      </p>
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" id="login-form">
+      {% csrf_token %}
+      <div class="form-row">
+        {{ form.username.errors }}
+        {{ form.username.label_tag }} {{ form.username }}
+      </div>
+      <div class="form-row">
+        {{ form.password.errors }}
+        {{ form.password.label_tag }} {{ form.password }}
+        <input type="hidden" name="next" value="{{ next }}">
+      </div>
+      <div class="form-row">
+        {{ form.otp_token.errors }}
+        {{ form.otp_token.label_tag }} {{ form.otp_token }}
+        <div class="help">
+          Los 6 números que ves ahora en tu app de autenticación.
+          Si no tienes el móvil, escribe uno de tus códigos de emergencia.
+        </div>
+      </div>
+      <div class="submit-row">
+        <input type="submit" value="Entrar">
+      </div>
+    </form>
+  </div>
+{% endblock %}

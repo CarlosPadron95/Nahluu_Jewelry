@@ -11,6 +11,8 @@ import cloudinary.uploader
 import pytest
 from cloudinary.exceptions import NotFound
 
+from apps.core.testing import verified_client
+
 # Dirección de Cloudinary inventada para los tests
 FAKE_CLOUDINARY_URL = "cloudinary://123456789012345:secreto-de-prueba@nahluu-test"
 
@@ -52,3 +54,15 @@ def cloudinary_storage_settings(settings, fake_cloudinary):
         },
     }
     return fake_cloudinary
+
+
+# --- Panel con verificación en dos pasos ---
+
+
+@pytest.fixture
+def admin_client(client, admin_user):
+    """
+    Sustituye al admin_client de pytest-django: el panel exige la
+    verificación en dos pasos, así que el superusuario de los tests la pasa.
+    """
+    return verified_client(client, admin_user)
