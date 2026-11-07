@@ -2,14 +2,14 @@
 # Versiones fijadas para que todos (tu ordenador, GitHub y Render) usen lo mismo.
 # Dependabot avisará cuando haya versiones nuevas.
 
-Django==5.2.18
+Django==5.2.19
 djangorestframework==3.18.3
 django-environ==0.14.0
 django-cors-headers==4.9.0
-psycopg[binary]==3.3.6
+psycopg[binary]==3.3.7
 whitenoise==6.12.0
-pillow==12.3.0
+pillow==13.0.0
 cloudinary==1.46.3
 django-otp==1.7.5
 segno==1.6.6
-django-axes==8.3.1
+django-axes==9.0.0
